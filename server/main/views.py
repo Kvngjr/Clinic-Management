@@ -3,10 +3,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
-from .serializers import UserSerializer, CustomTokenSerializer, LoginSerializer, CourseSerializer, AssessmentSerializer, GradeSerializer
+from .serializers import UserSerializer, CustomTokenSerializer, LoginSerializer, ConsultationSerializer, PatientSerializer, StaffSerializer
 from .permissions import IsOwnerOrIsAdminOrReadOnly
+from .models import Patient, Staff
 from rest_framework.authentication import TokenAuthentication
-from .models import Course, Assessment
+
 from django.contrib.auth import authenticate
 from django.db.models import Q
 
@@ -36,28 +37,25 @@ class SignInView(APIView):
       else: 
         return Response("Wrong username or password", status=400)
       
-class CourseViewSet(viewsets.ModelViewSet): 
-  queryset = Course.objects.all()
-  serializer_class = CourseSerializer
+class ConsultationViewSet(viewsets.ModelViewSet): 
+  serializer_class = ConsultationSerializer
   permission_classes = [IsAuthenticated]
   
   def get_queryset(self):
-    all = self.request.GET.get("all")
-    if not all:
-      return self.request.user.courses_attending.all()
-    return super().get_queryset()
-
-class AssessmentViewSet(viewsets.ModelViewSet): 
-  serializer_class = AssessmentSerializer
+    if not self.request.GET.get("all"): 
+      user = self.request.user
+      user_type = user.type
+      if (user_type == "patient"): 
+        return user.patient.consultations
+    else: 
+      return super().get_queryset()
+  
+class PatientViewSet(viewsets.ModelViewSet): 
+  queryset = Patient.objects.all()
+  serializer_class = PatientSerializer
   permission_classes = [IsAuthenticated]
   
-  def get_queryset(self):
-    assessments = Assessment.objects.filter(~Q(scores__student=self.request.user)).all()
-    return assessments
-
-class GradeViewSet(viewsets.ModelViewSet): 
-  serializer_class = GradeSerializer
+class StaffViewSet(viewsets.ModelViewSet): 
+  queryset = Staff.objects.all()
+  serializer_class = StaffSerializer
   permission_classes = [IsAuthenticated]
-  
-  def get_queryset(self):
-    return self.request.user.grades.all()

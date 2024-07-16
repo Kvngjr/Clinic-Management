@@ -1,15 +1,15 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
-from .views import SignUpView, SignInView, CourseViewSet, AssessmentViewSet, GradeViewSet
+from .views import SignUpView, SignInView, PatientViewSet, StaffViewSet, ConsultationViewSet
 from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'course', CourseViewSet, basename='course')
-router.register(r'assessment', AssessmentViewSet, basename='assessment')
-router.register(r'grade', GradeViewSet, basename='grade')
+router.register(r'patient', PatientViewSet, basename='patient')
+router.register(r'staff', StaffViewSet, basename='staff')
+router.register(r'consultation', ConsultationViewSet, basename='consultation')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

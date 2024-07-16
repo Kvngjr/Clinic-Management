@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Grade, Course, Question, Assessment
+from .models import CustomUser, Patient, Staff, Consultation
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
@@ -11,7 +11,6 @@ class CustomUserAdmin(admin.ModelAdmin):
     # Password field should be hidden for security reasons
     readonly_fields = ('password',)
 
-admin.site.register(Grade)
-admin.site.register(Course)
-admin.site.register(Question)
-admin.site.register(Assessment)
+admin.site.register(Patient)
+admin.site.register(Staff)
+admin.site.register(Consultation)
