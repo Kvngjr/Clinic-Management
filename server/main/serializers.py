@@ -7,9 +7,26 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     
     def create(self, validated_data): 
+      # create user
       validated_data["is_active"] = True
       validated_data["password"] = make_password(validated_data["password"])
-      return super().create(validated_data)
+      user = super().create(validated_data)
+      
+      initial_data = self.initial_data
+      initial_data["user"] = user.id
+      
+      user_type = self.initial_data.get("type")
+      
+      if user_type == "patient":
+        patient_serializer = PatientSerializer(data=initial_data)
+        if patient_serializer.is_valid(raise_exception=True): 
+          patient = patient_serializer.save()
+      else: 
+        staff_serializer = StaffSerializer(data=initial_data)
+        if staff_serializer.is_valid(raise_exception=True): 
+          staff = staff_serializer.save()
+      
+      return user
       
     class Meta:
       model = CustomUser
@@ -32,15 +49,11 @@ class CustomTokenSerializer(serializers.Serializer):
   user = UserSerializer()
   
 class PatientSerializer(serializers.ModelSerializer):
-  user = UserSerializer(read_only=True)
-  
   class Meta: 
     model = Patient
     fields = "__all__"
     
 class StaffSerializer(serializers.ModelSerializer):
-  user = UserSerializer(read_only=True)
-  
   class Meta: 
     model = Staff
     fields = "__all__"
@@ -48,7 +61,6 @@ class StaffSerializer(serializers.ModelSerializer):
 class ConsultationSerializer(serializers.ModelSerializer):
   staffs = StaffSerializer(many=True)
   patient = PatientSerializer()
-  
   class Meta: 
     model = Consultation
     fields = "__all__"
@@ -60,7 +72,6 @@ class CreateConsultationSerializer(serializers.ModelSerializer):
     
 class TicketSerializer(serializers.ModelSerializer):
   patient = PatientSerializer(read_only=True)
-  
   class Meta: 
     model = Ticket
     fields = "__all__"

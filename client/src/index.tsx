@@ -7,6 +7,8 @@ import AlertTemplate from "react-alert-template-basic";
 import { transitions, positions, Provider as AlertProvider } from "react-alert";
 // Material Dashboard 2 React Context Provider
 import { MaterialUIControllerProvider, SearchContextProvider } from "./context";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -20,12 +22,14 @@ const options = {
 };
 root.render(
   <BrowserRouter>
-    <SearchContextProvider>
-      <AlertProvider template={AlertTemplate} {...options}>
-        <MaterialUIControllerProvider>
-          <App />
-        </MaterialUIControllerProvider>
-      </AlertProvider>
-    </SearchContextProvider>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <SearchContextProvider>
+        <AlertProvider template={AlertTemplate} {...options}>
+          <MaterialUIControllerProvider>
+            <App />
+          </MaterialUIControllerProvider>
+        </AlertProvider>
+      </SearchContextProvider>
+    </LocalizationProvider>
   </BrowserRouter>
 );

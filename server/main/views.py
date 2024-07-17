@@ -15,8 +15,7 @@ from django.db.models import Q
 class SignUpView(APIView):
   def post(self, request):
     user_serializer = UserSerializer(data=request.data)
-    user_serializer.is_valid(raise_exception=True)
-    if user_serializer.is_valid():
+    if user_serializer.is_valid(raise_exception=True):
       user = user_serializer.save()
       token, created = Token.objects.get_or_create(user=user)
       serializer = CustomTokenSerializer(data={'token': token.key, 'user': UserSerializer(user).data})
