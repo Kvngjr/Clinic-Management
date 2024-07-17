@@ -140,7 +140,7 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName="LMS"
+            brandName="Clinic Management"
             routes={routes.filter((route) => route.key !== "sign-in" && route.key !== "sign-up")}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
@@ -159,7 +159,7 @@ export default function App() {
             })()}
         <Route
           path="*"
-          element={<Navigate to={getUser() ? "/dashboard" : "/authentication/sign-in"} />}
+          element={<Navigate to={getUser() ? "/records" : "/authentication/sign-in"} />}
         />
       </Routes>
     </ThemeProvider>

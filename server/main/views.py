@@ -3,9 +3,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
-from .serializers import UserSerializer, CustomTokenSerializer, LoginSerializer, ConsultationSerializer, PatientSerializer, StaffSerializer
+from .serializers import (UserSerializer, CustomTokenSerializer, LoginSerializer, CreateTicketSerializer,
+ConsultationSerializer, PatientSerializer, StaffSerializer, TicketSerializer, CreateConsultationSerializer)
 from .permissions import IsOwnerOrIsAdminOrReadOnly
-from .models import Patient, Staff
+from .models import Patient, Staff, Consultation, Ticket
 from rest_framework.authentication import TokenAuthentication
 
 from django.contrib.auth import authenticate
@@ -38,17 +39,15 @@ class SignInView(APIView):
         return Response("Wrong username or password", status=400)
       
 class ConsultationViewSet(viewsets.ModelViewSet): 
+  queryset = Consultation.objects.all()
   serializer_class = ConsultationSerializer
   permission_classes = [IsAuthenticated]
   
   def get_queryset(self):
-    if not self.request.GET.get("all"): 
-      user = self.request.user
-      user_type = user.type
-      if (user_type == "patient"): 
-        return user.patient.consultations
-    else: 
-      return super().get_queryset()
+    user = self.request.user
+    if (user.type == "patient"): 
+      return user.patient.consultations.all()
+    return super().get_queryset()
   
 class PatientViewSet(viewsets.ModelViewSet): 
   queryset = Patient.objects.all()
@@ -58,4 +57,25 @@ class PatientViewSet(viewsets.ModelViewSet):
 class StaffViewSet(viewsets.ModelViewSet): 
   queryset = Staff.objects.all()
   serializer_class = StaffSerializer
+  permission_classes = [IsAuthenticated]
+  
+class TicketViewSet(viewsets.ModelViewSet):
+  queryset = Ticket.objects.all()
+  serializer_class = TicketSerializer
+  permission_classes = [IsAuthenticated]
+  
+  def get_queryset(self):
+    user = self.request.user
+    if user.type == "patient": 
+      return user.patient.tickets.all()
+    return super().get_queryset()
+  
+class CreateConsultationViewSet(viewsets.ModelViewSet): 
+  queryset = Consultation.objects.all() 
+  serializer_class = CreateConsultationSerializer
+  permission_classes = [IsAuthenticated]
+  
+class CreateTicketViewSet(viewsets.ModelViewSet): 
+  queryset = Ticket.objects.all() 
+  serializer_class = CreateTicketSerializer
   permission_classes = [IsAuthenticated]

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Patient, Staff, Consultation
+from .models import CustomUser, Patient, Staff, Consultation, Ticket
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
@@ -14,3 +14,4 @@ class CustomUserAdmin(admin.ModelAdmin):
 admin.site.register(Patient)
 admin.site.register(Staff)
 admin.site.register(Consultation)
+admin.site.register(Ticket)

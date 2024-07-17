@@ -54,8 +54,9 @@ import {
 } from "context";
 import { SearchContext } from "context/index";
 import { debounce } from "@mui/material";
+import { signOut } from "utils/auth";
 
-function DashboardNavbar({ absolute, light, isMini }) {
+function DashboardNavbar({ absolute, light, isMini, nosearch }) {
   const { search: searchGlobal, setSearch: setSearchGloal } = useContext(SearchContext);
   const [search, setSearch] = useState(searchGlobal);
   const [navbarType, setNavbarType] = useState();
@@ -113,9 +114,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
       onClose={handleCloseMenu}
       sx={{ mt: 2 }}
     >
-      <NotificationItem icon={<Icon>email</Icon>} title="Check new messages" />
-      <NotificationItem icon={<Icon>podcasts</Icon>} title="Manage Podcast sessions" />
-      <NotificationItem icon={<Icon>shopping_cart</Icon>} title="Payment successfully completed" />
+      <NotificationItem icon={<Icon>close</Icon>} title="Sign Out" onClick={signOut} />
     </Menu>
   );
 
@@ -144,23 +143,20 @@ function DashboardNavbar({ absolute, light, isMini }) {
         </MDBox>
         {isMini ? null : (
           <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
-            <MDBox pr={1}>
-              <MDInput
-                label="Search here"
-                size="small"
-                value={search}
-                onChange={({ currentTarget }) => {
-                  setSearch(currentTarget.value);
-                  onSearchChangeGlobal(currentTarget.value);
-                }}
-              />
-            </MDBox>
+            {!nosearch && (
+              <MDBox pr={1}>
+                <MDInput
+                  label="Search here"
+                  size="small"
+                  value={search}
+                  onChange={({ currentTarget }) => {
+                    setSearch(currentTarget.value);
+                    onSearchChangeGlobal(currentTarget.value);
+                  }}
+                />
+              </MDBox>
+            )}
             <MDBox color={light ? "white" : "inherit"}>
-              <Link to="/authentication/sign-in/basic">
-                <IconButton sx={navbarIconButton} size="small" disableRipple>
-                  <Icon sx={iconsStyle}>account_circle</Icon>
-                </IconButton>
-              </Link>
               <IconButton
                 size="small"
                 disableRipple
@@ -172,15 +168,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   {miniSidenav ? "menu_open" : "menu"}
                 </Icon>
               </IconButton>
-              <IconButton
-                size="small"
-                disableRipple
-                color="inherit"
-                sx={navbarIconButton}
-                onClick={handleConfiguratorOpen}
-              >
-                <Icon sx={iconsStyle}>settings</Icon>
-              </IconButton>
+
               <IconButton
                 size="small"
                 disableRipple
@@ -191,7 +179,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 variant="contained"
                 onClick={handleOpenMenu}
               >
-                <Icon sx={iconsStyle}>notifications</Icon>
+                <Icon sx={iconsStyle}>account_circle</Icon>
               </IconButton>
               {renderMenu()}
             </MDBox>

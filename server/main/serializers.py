@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import CustomUser, Patient, Staff, Consultation
+from .models import CustomUser, Patient, Staff, Consultation, Ticket
 from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.ModelSerializer):
@@ -32,23 +32,40 @@ class CustomTokenSerializer(serializers.Serializer):
   user = UserSerializer()
   
 class PatientSerializer(serializers.ModelSerializer):
-  user = UserSerializer()
+  user = UserSerializer(read_only=True)
   
   class Meta: 
     model = Patient
     fields = "__all__"
     
 class StaffSerializer(serializers.ModelSerializer):
-  user = UserSerializer()
+  user = UserSerializer(read_only=True)
   
   class Meta: 
     model = Staff
     fields = "__all__"
     
 class ConsultationSerializer(serializers.ModelSerializer):
-  staff = StaffSerializer(many=True)
+  staffs = StaffSerializer(many=True)
   patient = PatientSerializer()
   
   class Meta: 
     model = Consultation
+    fields = "__all__"
+
+class CreateConsultationSerializer(serializers.ModelSerializer):  
+  class Meta: 
+    model = Consultation
+    fields = "__all__"
+    
+class TicketSerializer(serializers.ModelSerializer):
+  patient = PatientSerializer(read_only=True)
+  
+  class Meta: 
+    model = Ticket
+    fields = "__all__"
+    
+class CreateTicketSerializer(serializers.ModelSerializer):
+  class Meta: 
+    model = Ticket
     fields = "__all__"

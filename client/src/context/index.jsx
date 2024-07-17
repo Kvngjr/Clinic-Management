@@ -119,6 +119,7 @@ export const SearchContext = createContext("");
 
 export const SearchContextProvider = ({ children }) => {
   const [search, setSearch] = useState(null);
-  const value = useMemo(() => ({ search, setSearch }), [search]);
+  const [item, setItem] = useState(null);
+  const value = useMemo(() => ({ search, setSearch, item, setItem }), [search, item]);
   return <SearchContext.Provider value={value}>{children}</SearchContext.Provider>;
 };

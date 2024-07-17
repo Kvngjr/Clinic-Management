@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 /** 
   All of the routes for the Material Dashboard 2 React are added here,
   You can add a new route, customize the routes and delete the routes here.
@@ -37,13 +22,12 @@ Coded by www.creative-tim.com
 import React from "react";
 
 // Material Dashboard 2 React layouts
-import Dashboard from "layouts/dashboard";
-import Courses from "layouts/courses";
-import Grades from "layouts/grades";
-import Assessments from "layouts/assessments";
-import Billing from "layouts/billing";
-import Notifications from "layouts/notifications";
-import Profile from "layouts/profile";
+import Records from "layouts/records";
+import Tickets from "layouts/tickets";
+import ViewTickets from "layouts/tickets/view";
+import CreateTickets from "layouts/tickets/create";
+import ViewRecords from "layouts/records/view";
+import CreateRecords from "layouts/records/create";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 
@@ -53,60 +37,48 @@ import Icon from "@mui/material/Icon";
 const routes = [
   {
     type: "collapse",
-    name: "Dashboard",
-    key: "dashboard",
-    icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/dashboard",
-    component: <Dashboard />,
+    name: "Medical Records",
+    key: "records",
+    icon: <Icon fontSize="small">table</Icon>,
+    route: "/records",
+    component: <Records />,
   },
   {
     type: "collapse",
-    name: "Courses",
-    key: "courses",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/courses",
-    component: <Courses />,
+    name: "Tickets",
+    key: "tickets",
+    icon: <Icon fontSize="small">confirmation_number</Icon>,
+    route: "/tickets",
+    component: <Tickets />,
   },
   {
-    type: "collapse",
-    name: "Assessments",
-    key: "assessments",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/assessments",
-    component: <Assessments />,
+    type: "title",
+    name: "ViewTicket",
+    key: "viewTicket",
+    route: "/tickets/view",
+    component: <ViewTickets />,
   },
   {
-    type: "collapse",
-    name: "Grades",
-    key: "grades",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/grades",
-    component: <Grades />,
+    type: "title",
+    name: "createTicket",
+    key: "createTicket",
+    route: "/tickets/create",
+    component: <CreateTickets />,
   },
-  // {
-  //   type: "collapse",
-  //   name: "Billing",
-  //   key: "billing",
-  //   icon: <Icon fontSize="small">receipt_long</Icon>,
-  //   route: "/billing",
-  //   component: <Billing />,
-  // },
-  // {
-  //   type: "collapse",
-  //   name: "Notifications",
-  //   key: "notifications",
-  //   icon: <Icon fontSize="small">notifications</Icon>,
-  //   route: "/notifications",
-  //   component: <Notifications />,
-  // },
-  // {
-  //   type: "collapse",
-  //   name: "Profile",
-  //   key: "profile",
-  //   icon: <Icon fontSize="small">person</Icon>,
-  //   route: "/profile",
-  //   component: <Profile />,
-  // },
+  {
+    type: "title",
+    name: "viewRecord",
+    key: "viewRecord",
+    route: "/records/view",
+    component: <ViewRecords />,
+  },
+  {
+    type: "title",
+    name: "CreateRecord",
+    key: "createRecord",
+    route: "/records/create",
+    component: <CreateRecords />,
+  },
   {
     type: "collapse",
     name: "Sign In",

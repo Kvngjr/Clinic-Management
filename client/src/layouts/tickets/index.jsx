@@ -12,16 +12,24 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
-// Data
-import courseTableData from "layouts/assessments/data/assessmentsTableData";
+// Datax
+import ticketsTableData from "layouts/tickets/data/ticketsTableData";
+import { SearchContext } from "context/index";
+import { useContext } from "react";
 import { fetch_authenticated } from "utils/globals";
+import { getUser } from "utils/auth";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function Tables() {
-  const { columns, rows } = courseTableData((setAssessment) => {
-    fetch_authenticated(`/assessment`)
+  const { columns, rows } = ticketsTableData((setTickets) => {
+    fetch_authenticated(`/ticket`)
       .then((res) => res.json())
-      .then((assessments) => setAssessment(assessments));
+      .then((tickets) => setTickets(tickets));
   });
+  const { search } = useContext(SearchContext);
+  const { user } = getUser();
+  const navigate = useNavigate();
 
   return (
     <DashboardLayout>
@@ -39,10 +47,20 @@ function Tables() {
                 bgColor="info"
                 borderRadius="lg"
                 coloredShadow="info"
+                sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
               >
                 <MDTypography variant="h6" color="white">
-                  Take your Assessments
+                  {user.type === "patient" && "Your"} Tickets
                 </MDTypography>
+                {user.type === "patient" && (
+                  <Button
+                    variant="outlined"
+                    color="white"
+                    onClick={() => navigate("/tickets/create")}
+                  >
+                    New
+                  </Button>
+                )}
               </MDBox>
               <MDBox pt={3}>
                 <DataTable

@@ -17,14 +17,20 @@ class Patient(models.Model):
   address = models.TextField(blank=True, verbose_name="Address")
   dob = models.DateField()
   gender = models.TextField(choices=(("male", "Male"), ("female", "Female")))
-  user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="patient")
+  user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="patient", unique=True)
   
 class Staff(models.Model): 
   department = models.TextField()
   specialization = models.TextField()
-  user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="staff")
+  user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="staff", unique=True)
   
 class Consultation(models.Model): 
   brief = models.TextField()
+  time = models.DateTimeField(auto_now_add=True)
   patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name="consultations")
   staffs = models.ManyToManyField(Staff, related_name="consultations")
+  
+class Ticket(models.Model): 
+  complaint = models.TextField()
+  time = models.DateTimeField(auto_now_add=True)
+  patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name="tickets")

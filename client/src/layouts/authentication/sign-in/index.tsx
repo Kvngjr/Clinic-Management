@@ -16,17 +16,23 @@ import { signInUser, User } from "utils/auth";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "utils/globals";
 import PageLayout from "examples/LayoutContainers/PageLayout";
+import { useAlert } from "react-alert";
 
 export default function SignIn() {
   const navigate = useNavigate();
-
+  const alert = useAlert();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const res = await fetch(`${baseUrl}sign-in/`, { method: "POST", body: data });
-    const credentials: { token: string; user: User } = await res.json();
-    await signInUser(credentials.user, credentials.token);
-    navigate("/");
+    if (res.status === 200 || res.status === 201) {
+      alert.show("Sign-In Successful", { type: "success" });
+      const credentials: { token: string; user: User } = await res.json();
+      signInUser(credentials.user, credentials.token);
+      navigate("/");
+    } else {
+      alert.show("Something went wrong");
+    }
   };
 
   return (

@@ -39,6 +39,7 @@ export const signOut = () => {
   try {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    location.reload();
     return null;
   } catch (e) {
     return e;
