@@ -51,7 +51,7 @@ export const User = ({ user, patient }) => {
           <MDTypography display="block" variant="button" fontWeight="medium">
             {`${user.first_name} ${user.last_name}`} ({user.type})
           </MDTypography>
-          <MDTypography variant="caption">{user.email}</MDTypography>
+          <MDTypography variant="caption">{user.username}</MDTypography>
         </MDBox>
       </MDBox>
       {patient && <MDTypography variant="caption">{patient.medical_history}</MDTypography>}

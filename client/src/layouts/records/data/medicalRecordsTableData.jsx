@@ -11,69 +11,38 @@ import { useNavigate } from "react-router-dom";
 import { FormattedTime, User } from "utils/globals";
 
 export default function data(fetch) {
-  const [consultations, setConsultations] = useState([]);
+  const [patients, setPatients] = useState([]);
   const navigate = useNavigate();
   const { search, setItem } = useContext(SearchContext);
   const user = getUser().user;
 
   useLayoutEffect(() => {
-    fetch(setConsultations);
+    fetch(setPatients);
   }, []);
-
-  const Course = ({ title, code }) => (
-    <MDBox lineHeight={1} textAlign="left">
-      <MDTypography display="block" variant="caption" color="text" fontWeight="medium">
-        {code}
-      </MDTypography>
-      <MDTypography variant="caption">{title}</MDTypography>
-    </MDBox>
-  );
 
   const onButtonPress = (id) => {
     setItem(id);
-    navigate("/records/view");
   };
-  const columns =
-    user.type === "staff"
-      ? [
-          { Header: "Doctor", accessor: "doctor", width: "25%", align: "left" },
-          { Header: "Patient", accessor: "patient", width: "25%", align: "left" },
-          { Header: "Brief", accessor: "brief", width: "25%", align: "left" },
-          { Header: "Time", accessor: "time", width: "15%", align: "left" },
-          { Header: "action", accessor: "action", align: "center" },
-        ]
-      : [
-          { Header: "Doctor", accessor: "doctor", width: "30%", align: "left" },
-          { Header: "Brief", accessor: "brief", width: "35%", align: "left" },
-          { Header: "Time", accessor: "time", width: "20%", align: "left" },
-          { Header: "action", accessor: "action", align: "center" },
-        ];
+  const columns = [
+    { Header: "Patient", accessor: "patient", width: "90%", align: "left" },
+    { Header: "action", accessor: "action", align: "center" },
+  ];
   return {
     columns,
-    rows: consultations
+    rows: patients
       .filter(
-        (record) =>
-          record.staffs[0].user.first_name.toLowerCase().includes(search?.toLowerCase() || "") ||
-          record.staffs[0].user.last_name.toLowerCase().includes(search?.toLowerCase() || "") ||
-          record.patient.user.first_name.toLowerCase().includes(search?.toLowerCase() || "") ||
-          record.patient.user.last_name.toLowerCase().includes(search?.toLowerCase() || "") ||
-          record.brief.toLowerCase().includes(search?.toLowerCase() || "")
+        (patient) =>
+          patient.user.first_name.toLowerCase().includes(search?.toLowerCase() || "") ||
+          patient.user.last_name.toLowerCase().includes(search?.toLowerCase() || "")
       )
-      .map((record) => ({
-        doctor: <User user={record.staffs[0].user} />,
-        patient: <User user={record.patient.user} />,
-        brief: (
-          <MDTypography fontSize={16} color="text">
-            {record.brief}
-          </MDTypography>
-        ),
-        time: <FormattedTime time={record.time} />,
+      .map((patient) => ({
+        patient: <User user={patient.user} />,
         action: (
           <Button
             variant="contained"
             size="small"
             sx={{ color: "#fff" }}
-            onClick={() => onButtonPress(record.id)}
+            onClick={() => onButtonPress(patient.id)}
           >
             View
           </Button>

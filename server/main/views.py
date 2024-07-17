@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 from .serializers import (UserSerializer, CustomTokenSerializer, LoginSerializer, CreateTicketSerializer,
-ConsultationSerializer, PatientSerializer, StaffSerializer, TicketSerializer, CreateConsultationSerializer)
+ConsultationSerializer, PatientSerializer, StaffSerializer, TicketSerializer, CreateConsultationSerializer, CreatePatientSerializer)
 from .permissions import IsOwnerOrIsAdminOrReadOnly
 from .models import Patient, Staff, Consultation, Ticket
 from rest_framework.authentication import TokenAuthentication
@@ -78,4 +78,9 @@ class CreateConsultationViewSet(viewsets.ModelViewSet):
 class CreateTicketViewSet(viewsets.ModelViewSet): 
   queryset = Ticket.objects.all() 
   serializer_class = CreateTicketSerializer
+  permission_classes = [IsAuthenticated]
+  
+class CreatePatientViewSet(viewsets.ModelViewSet): 
+  queryset = Patient.objects.all() 
+  serializer_class = CreatePatientSerializer
   permission_classes = [IsAuthenticated]

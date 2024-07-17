@@ -63,6 +63,7 @@ export default function SignUp() {
       navigate("/");
     } else {
       const error = await res.json();
+      console.log(error);
       alert.show(Object.values(error)[0][0], { type: "error" });
     }
   };
@@ -112,12 +113,12 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="username"
-                  label="Username"
+                  label="Matric Number"
                   name="username"
                   autoComplete="username"
                 />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -126,7 +127,7 @@ export default function SignUp() {
                   name="email"
                   autoComplete="email"
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
                 <FormControl sx={{ width: "100%" }} variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">Passport</InputLabel>
@@ -156,15 +157,6 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  name="phone_number"
-                  label="Phone Number"
-                  autoComplete="phone"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
                   name="type"
                   label="User Type"
                   select
@@ -182,22 +174,15 @@ export default function SignUp() {
                     <TextField
                       required
                       fullWidth
-                      name="address"
-                      label="Address"
-                      id="address"
-                      autoComplete="address"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      multiline
-                      name="medical_history"
-                      label="Medical History"
-                      id="medical_history"
-                      autoComplete="medical_history"
-                    />
+                      name="gender"
+                      label="Gender"
+                      defaultValue=""
+                      select
+                      SelectProps={{ sx: { height: "45px" } }}
+                    >
+                      <MenuItem value="male">Male</MenuItem>
+                      <MenuItem value="female">Female</MenuItem>
+                    </TextField>
                   </Grid>
                   <Grid item xs={12}>
                     <DatePicker
@@ -208,18 +193,53 @@ export default function SignUp() {
                     />
                   </Grid>
                   <Grid item xs={12}>
+                    <TextField required fullWidth name="age" label="Age" type="number" />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField required fullWidth name="faculty" label="Faculty" />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField required fullWidth name="department" label="Department" />
+                  </Grid>
+                  <Grid item xs={12}>
                     <TextField
                       required
                       fullWidth
-                      name="gender"
-                      label="Gender"
-                      defaultValue=""
-                      select
-                      SelectProps={{ sx: { height: "45px" } }}
-                    >
-                      <MenuItem value="male">Male</MenuItem>
-                      <MenuItem value="female">Female</MenuItem>
-                    </TextField>
+                      name="phone_number"
+                      label="Phone Number"
+                      autoComplete="phone"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="address"
+                      label="Address"
+                      id="address"
+                      autoComplete="address"
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TextField required fullWidth name="next_of_kin" label="Next of Kin" />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="phone_number_of_next_of_kin"
+                      label="Next of Kin Phone Number"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="address_of_next_of_kin"
+                      label="Next of kin Address"
+                    />
                   </Grid>
                 </>
               )}

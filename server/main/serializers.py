@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.ModelSerializer):
   password = serializers.CharField(write_only=True)
-  
+
   def create(self, validated_data): 
     # create user
     validated_data["is_active"] = True
@@ -31,8 +31,9 @@ class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model = CustomUser
     fields = ['date_joined','email','first_name','groups','id','is_active','is_staff',
-    'is_superuser','last_login','last_name','passport','phone_number','type','user_permissions',
+    'is_superuser','last_login','last_name','passport','type','user_permissions',
     'username','patient', 'staff', 'password']
+    read_only_fields = ["patient", "staff"]
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
