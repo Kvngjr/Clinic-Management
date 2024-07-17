@@ -66,6 +66,7 @@ class TicketViewSet(viewsets.ModelViewSet):
   def get_queryset(self):
     user = self.request.user
     if user.type == "patient": 
+      print(user.patient.tickets.all())
       return user.patient.tickets.all()
     return super().get_queryset()
   

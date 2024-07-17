@@ -8,6 +8,7 @@ import { Avatar, Button } from "@mui/material";
 import { getUser } from "utils/auth";
 import { SearchContext } from "context/index";
 import { useNavigate } from "react-router-dom";
+import { FormattedTime, User } from "utils/globals";
 
 export default function data(fetch) {
   const [consultations, setConsultations] = useState([]);
@@ -18,18 +19,6 @@ export default function data(fetch) {
   useLayoutEffect(() => {
     fetch(setConsultations);
   }, []);
-
-  const User = ({ user }) => (
-    <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <Avatar src={user.passport} />
-      <MDBox ml={2} lineHeight={1}>
-        <MDTypography display="block" variant="button" fontWeight="medium">
-          {`${user.first_name} ${user.last_name}`}
-        </MDTypography>
-        <MDTypography variant="caption">{user.email}</MDTypography>
-      </MDBox>
-    </MDBox>
-  );
 
   const Course = ({ title, code }) => (
     <MDBox lineHeight={1} textAlign="left">
@@ -78,11 +67,7 @@ export default function data(fetch) {
             {record.brief}
           </MDTypography>
         ),
-        time: (
-          <MDTypography fontSize={14} color="text">
-            {new Date(record.time).toLocaleString()}
-          </MDTypography>
-        ),
+        time: <FormattedTime time={record.time} />,
         action: (
           <Button
             variant="contained"

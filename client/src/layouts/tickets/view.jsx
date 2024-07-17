@@ -16,14 +16,16 @@ import DataTable from "examples/Tables/DataTable";
 import ticketsTableData from "layouts/tickets/data/ticketsTableData";
 import { SearchContext } from "context/index";
 import React, { useContext, useLayoutEffect, useState } from "react";
-import { fetch_authenticated, patch_authenticated } from "utils/globals";
+import { fetch_authenticated, FormattedTime, patch_authenticated, User } from "utils/globals";
 import { getUser } from "utils/auth";
-import { Avatar, Box, Button, TextField } from "@mui/material";
+import { Avatar, Box, Button, MenuItem, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
 
 function Tables() {
   const [ticket, setTicket] = useState();
+  const [staffs, setStaffs] = useState();
+
   const { item } = useContext(SearchContext);
   const { user } = getUser();
   const alert = useAlert();
@@ -31,32 +33,29 @@ function Tables() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const res = await patch_authenticated("ticket/1", { body: JSON.stringify(ticket) });
+    ticket.patient = ticket.patient.id;
+    const res = await patch_authenticated(`create-ticket/${item}`, {
+      body: JSON.stringify(ticket),
+    });
+    const res_data = await res.json();
     if (res.status === 200 || res.status === 201) {
-      const res_data = await res.json();
       alert.show("Ticket Updated", { type: "success" });
       navigate("/tickets");
     } else {
-      alert.show("Something went wrong");
+      alert.show(Object.values(res_data)[0][0]);
     }
   };
-
-  const User = ({ user }) => (
-    <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <Avatar src={user.passport} />
-      <MDBox ml={2} lineHeight={1}>
-        <MDTypography display="block" variant="button" fontWeight="medium">
-          {`${user.first_name} ${user.last_name}`}
-        </MDTypography>
-        <MDTypography variant="caption">{user.email}</MDTypography>
-      </MDBox>
-    </MDBox>
-  );
 
   useLayoutEffect(() => {
     fetch_authenticated(`ticket/${item}`)
       .then((res) => res.json())
-      .then((ticket) => setTicket(ticket));
+      .then((ticket) => {
+        ticket.assigned_to = ticket.assigned_to?.id || "";
+        setTicket(ticket);
+      });
+    fetch_authenticated("staff")
+      .then((res) => res.json())
+      .then((staffs) => setStaffs(staffs));
   }, []);
   return (
     <DashboardLayout>
@@ -88,10 +87,8 @@ function Tables() {
                     sx={{ mt: 1, mx: "auto", px: 1 }}
                     maxWidth={440}
                   >
-                    <User user={ticket.patient.user} />
-                    <MDTypography sx={{ textAlign: "right", fontSize: 14 }}>
-                      {ticket.time}
-                    </MDTypography>
+                    <User user={ticket.patient.user} patient={ticket.patient} />
+                    <FormattedTime time={ticket.time} />
                     <TextField
                       margin="normal"
                       required
@@ -105,11 +102,30 @@ function Tables() {
                         setTicket((prev) => ({ ...prev, complaint: e.target.value }))
                       }
                     />
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      multiline
+                      disabled={user.type === "patient"}
+                      variant="standard"
+                      helperText="Assign Someone this Ticket"
+                      label="Assigned To"
+                      name="assigned_to"
+                      select
+                      defaultValue={ticket.assigned_to}
+                      onChange={(e) => setTicket((p) => ({ ...p, assigned_to: e.target.value }))}
+                    >
+                      {staffs?.map((staff) => (
+                        <MenuItem key={staff.id} value={staff.id}>
+                          <User user={staff.user} />
+                        </MenuItem>
+                      ))}
+                    </TextField>
                     <Button
                       type="submit"
                       fullWidth
                       variant="contained"
-                      disabled={user.type === "staff"}
                       sx={{ mt: 3, mb: 2, color: "#fff" }}
                     >
                       Update

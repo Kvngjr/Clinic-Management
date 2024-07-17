@@ -1,10 +1,7 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -14,10 +11,9 @@ import Container from "@mui/material/Container";
 import { FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput } from "@mui/material";
 import { signInUser, User } from "utils/auth";
 import { useNavigate } from "react-router-dom";
-import { baseUrl } from "utils/globals";
+import { baseUrl, fetch_authenticated } from "utils/globals";
 import PageLayout from "examples/LayoutContainers/PageLayout";
 import { DatePicker } from "@mui/x-date-pickers";
-import { SendToMobileOutlined } from "@mui/icons-material";
 import { useAlert } from "react-alert";
 
 export default function SignUp() {
@@ -193,6 +189,17 @@ export default function SignUp() {
                     />
                   </Grid>
                   <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      multiline
+                      name="medical_history"
+                      label="Medical History"
+                      id="medical_history"
+                      autoComplete="medical_history"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
                     <DatePicker
                       sx={{ width: "100%" }}
                       label="Date of Birth"
@@ -218,6 +225,20 @@ export default function SignUp() {
               )}
               {type === "staff" && (
                 <>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="role"
+                      label="Role"
+                      defaultValue=""
+                      select
+                      SelectProps={{ sx: { height: "45px" } }}
+                    >
+                      <MenuItem value="doctor">Doctor</MenuItem>
+                      <MenuItem value="nurse">Nurse</MenuItem>
+                    </TextField>
+                  </Grid>
                   <Grid item xs={12}>
                     <TextField
                       required

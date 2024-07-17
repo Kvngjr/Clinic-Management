@@ -15,7 +15,7 @@ import DataTable from "examples/Tables/DataTable";
 // Data
 import { SearchContext } from "context/index";
 import React, { useContext, useLayoutEffect, useState } from "react";
-import { fetch_authenticated, patch_authenticated } from "utils/globals";
+import { fetch_authenticated, FormattedTime, patch_authenticated, User } from "utils/globals";
 import { getUser } from "utils/auth";
 import { Avatar, Box, Button, Divider, Icon, TextField, Typography } from "@mui/material";
 import { useAlert } from "react-alert";
@@ -33,26 +33,15 @@ function Tables() {
     const res = await patch_authenticated(`consultation/${item}`, {
       body: JSON.stringify(consultation),
     });
+    const res_data = await res.json();
     if (res.status === 200 || res.status === 201) {
-      const res_data = await res.json();
       alert.show("Record Updated", { type: "success" });
       navigate("/records");
     } else {
+      console.log(res_data);
       alert.show("Something went wrong");
     }
   };
-
-  const User = ({ user }) => (
-    <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <Avatar src={user.passport} />
-      <MDBox ml={2} lineHeight={1}>
-        <MDTypography display="block" variant="button" fontWeight="medium">
-          {`${user.first_name} ${user.last_name}`}
-        </MDTypography>
-        <MDTypography variant="caption">{user.email}</MDTypography>
-      </MDBox>
-    </MDBox>
-  );
 
   useLayoutEffect(() => {
     fetch_authenticated(`consultation/${item}`)
@@ -87,19 +76,14 @@ function Tables() {
                     component="form"
                     onSubmit={handleSubmit}
                     noValidate
-                    sx={{ mt: 1, mx: "auto", px: 1 }}
+                    sx={{ mt: 1, mx: "auto", px: 1, display: "grid", gap: 2 }}
                     maxWidth={440}
                   >
-                    <Typography>Patient</Typography>
-                    <User user={consultation.patient.user} />
-                    <Typography sx={{ mt: 2 }}>Medical professional(s)</Typography>
+                    <User user={consultation.patient.user} patient={consultation.patient} />
                     {consultation.staffs.map((staff) => (
                       <User user={staff.user} />
                     ))}
-                    <MDTypography sx={{ textAlign: "right", fontSize: 14 }}>
-                      {consultation.time}
-                    </MDTypography>
-                    <Divider />
+                    <FormattedTime time={consultation.time} />
                     <TextField
                       margin="normal"
                       required

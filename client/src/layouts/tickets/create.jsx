@@ -15,7 +15,7 @@ import DataTable from "examples/Tables/DataTable";
 // Data
 import { SearchContext } from "context/index";
 import React, { useContext, useLayoutEffect, useState } from "react";
-import { fetch_authenticated, patch_authenticated, post_authenticated } from "utils/globals";
+import { fetch_authenticated, patch_authenticated, post_authenticated, User } from "utils/globals";
 import { getUser } from "utils/auth";
 import { Avatar, Box, Button, Divider, MenuItem, TextField, Typography } from "@mui/material";
 import { useAlert } from "react-alert";
@@ -32,7 +32,7 @@ function Tables() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = {
-      patient: user.patient.id,
+      patient: user.patient,
       complaint,
     };
     try {
@@ -42,7 +42,7 @@ function Tables() {
       if (res.status === 200 || res.status === 201) {
         const res_data = await res.json();
         alert.show("New Ticket Created", { type: "success" });
-        navigate("/records");
+        navigate("/tickets");
       } else {
         alert.show("Something went wrong");
       }
@@ -50,18 +50,6 @@ function Tables() {
       alert.show("Something went wrong");
     }
   };
-
-  const User = ({ user }) => (
-    <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <Avatar src={user.passport} />
-      <MDBox ml={2} lineHeight={1}>
-        <MDTypography display="block" variant="button" fontWeight="medium">
-          {`${user.first_name} ${user.last_name}`}
-        </MDTypography>
-        <MDTypography variant="caption">{user.email}</MDTypography>
-      </MDBox>
-    </MDBox>
-  );
 
   return (
     <DashboardLayout>
