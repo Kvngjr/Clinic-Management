@@ -68,7 +68,7 @@ function Tables() {
                 {(item || user.type === "patient") && (
                   <MedicalRecord patient_id={user.type === "patient" ? user.patient : item} />
                 )}
-                {!item && (
+                {!item && user.type === "staff" && (
                   <DataTable
                     table={{ columns, rows }}
                     isSorted={false}
