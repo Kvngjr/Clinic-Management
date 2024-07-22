@@ -22,7 +22,9 @@
 import React from "react";
 
 // Material Dashboard 2 React layouts
+import Dashboard from "layouts/dashboard";
 import Records from "layouts/records";
+import Profile from "layouts/profile";
 import ViewRecord from "layouts/records/view";
 import Consultations from "layouts/consultation";
 import ViewConsultation from "layouts/consultation/view";
@@ -32,8 +34,17 @@ import SignUp from "layouts/authentication/sign-up";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import { getUser } from "utils/auth";
 
 const routes = [
+  {
+    type: "collapse",
+    name: "DashBoard",
+    key: "dashboard",
+    icon: <Icon fontSize="small">table</Icon>,
+    route: "/dashboard",
+    component: <Dashboard />,
+  },
   {
     type: "collapse",
     name: "Medical Records",
@@ -51,7 +62,7 @@ const routes = [
     component: <ViewRecord />,
   },
   {
-    type: "collapse",
+    type: getUser()?.user.type === "patient" ? null : "collapse",
     name: "Patient Management",
     key: "consultations",
     icon: <Icon fontSize="small">table</Icon>,
@@ -73,6 +84,14 @@ const routes = [
     icon: <Icon fontSize="small">table</Icon>,
     route: "/consultations/create",
     component: <CreateConsultation />,
+  },
+  {
+    type: "collapse",
+    name: "Profile",
+    key: "profile",
+    icon: <Icon fontSize="small">table</Icon>,
+    route: "/profile",
+    component: <Profile />,
   },
   {
     type: "collapse",

@@ -25,6 +25,13 @@ export const getUser: () => { user: User; token: string } | null = () => {
   }
 };
 
+export const updateUser = (user: User) => {
+  if (user) {
+    const userString = JSON.stringify(user);
+    localStorage.setItem("user", userString);
+  }
+};
+
 export const signInUser = (user: User, token: string) => {
   if (!user || !token) {
     throw "User Object not passed";

@@ -65,10 +65,8 @@ function Tables() {
                 )} */}
               </MDBox>
               <MDBox pt={3}>
-                {(item || user.type === "patient") && (
-                  <MedicalRecord patient_id={user.type === "patient" ? user.patient : item} />
-                )}
-                {!item && user.type === "staff" && (
+                {user.type === "patient" && <MedicalRecord patient_id={user.patient.id} />}
+                {user.type === "staff" && (
                   <DataTable
                     table={{ columns, rows }}
                     isSorted={false}

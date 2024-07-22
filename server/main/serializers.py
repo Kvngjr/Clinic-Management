@@ -3,9 +3,21 @@ from rest_framework import serializers
 from .models import CustomUser, Patient, Staff, Consultation, Ticket
 from django.contrib.auth.hashers import make_password
 
+class PatientSerializerMini(serializers.ModelSerializer):
+  class Meta: 
+    model = Patient
+    exclude = ["user"]
+    
+class StaffSerializerMini(serializers.ModelSerializer):
+  class Meta: 
+    model = Staff
+    exclude = ["user"]
+    
 class UserSerializer(serializers.ModelSerializer):
-  password = serializers.CharField(write_only=True)
-
+  password = serializers.CharField(write_only=True, required=False)
+  patient = PatientSerializerMini(read_only=True)
+  staff = StaffSerializerMini(read_only=True)
+  
   def create(self, validated_data): 
     # create user
     validated_data["is_active"] = True

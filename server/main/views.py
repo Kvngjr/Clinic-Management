@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
-from .serializers import (UserSerializer, CustomTokenSerializer, LoginSerializer, CreateTicketSerializer,
+from .serializers import (UserSerializer, CustomTokenSerializer, LoginSerializer, CreateTicketSerializer, CreateStaffSerializer,
 ConsultationSerializer, PatientSerializer, StaffSerializer, TicketSerializer, CreateConsultationSerializer, CreatePatientSerializer)
 from .permissions import IsOwnerOrIsAdminOrReadOnly
 from .models import Patient, Staff, Consultation, Ticket
@@ -84,3 +84,20 @@ class CreatePatientViewSet(viewsets.ModelViewSet):
   queryset = Patient.objects.all() 
   serializer_class = CreatePatientSerializer
   permission_classes = [IsAuthenticated]
+  
+class UpdateProfileView(APIView): 
+  permission_classes = [IsAuthenticated]
+  
+  def post(self, request):
+    user_serializer = UserSerializer(request.user, data=request.data) 
+    user_serializer.is_valid(raise_exception=True)
+    user_serializer.save()
+    if (request.user.type == "patient"):
+      patient_serializer = CreatePatientSerializer(Patient.objects.get(id=request.user.patient.id), data=request.data)
+      patient_serializer.is_valid(raise_exception=True)
+      patient_serializer.save()
+    else: 
+      staff_serializer = CreateStaffSerializer(Staff.objects.get(id=request.user.staff.id), data=request.data)
+      staff_serializer.is_valid(raise_exception=True)
+      staff_serializer.save()
+    return Response(user_serializer.data)

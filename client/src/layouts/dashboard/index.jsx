@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 // @mui material components
 import Grid from "@mui/material/Grid";
 
@@ -34,22 +19,35 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 // Dashboard components
 import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
+import { useLayoutEffect, useState } from "react";
+import { fetch_authenticated } from "utils/globals";
 
 function Dashboard() {
   const { sales, tasks } = reportsLineChartData;
+  const [patients, setPatients] = useState([]);
+  const [consultations, setConsultations] = useState([]);
+
+  useLayoutEffect(() => {
+    fetch_authenticated("patient")
+      .then((res) => res.json())
+      .then((patients) => setPatients(patients));
+    fetch_authenticated("consultation")
+      .then((res) => res.json())
+      .then((consultations) => setConsultations(consultations));
+  }, []);
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox py={3}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6} lg={3}>
+          <Grid item xs={12} md={6} lg={4}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="dark"
                 icon="weekend"
-                title="Courses enrolled"
-                count={12}
+                title="Number of Patients"
+                count={patients.length}
                 percentage={{
                   color: "success",
                   amount: "",
@@ -58,12 +56,18 @@ function Dashboard() {
               />
             </MDBox>
           </Grid>
-          <Grid item xs={12} md={6} lg={3}>
+          <Grid item xs={12} md={6} lg={4}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="leaderboard"
-                title="Average Grade"
-                count="77"
+                title="Visitors Today"
+                count={
+                  consultations.filter((cons) => {
+                    const consultationDate = new Date(cons.time).toDateString();
+                    const todayDate = new Date().toDateString();
+                    return consultationDate === todayDate;
+                  }).length
+                }
                 percentage={{
                   color: "success",
                   amount: "",
@@ -72,28 +76,30 @@ function Dashboard() {
               />
             </MDBox>
           </Grid>
-          <Grid item xs={12} md={6} lg={3}>
+          <Grid item xs={12} md={6} lg={4}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="success"
                 icon="store"
-                title="Absent Days"
-                count="34"
+                title="Patients Undergoing Treatment"
+                count={
+                  consultations.filter((cons) => cons.status === "undergoing_treatment").length
+                }
                 percentage={{
                   color: "success",
                   amount: "",
-                  label: "than yesterday",
+                  label: "Just updated",
                 }}
               />
             </MDBox>
           </Grid>
-          <Grid item xs={12} md={6} lg={3}>
+          <Grid item xs={12} md={6} lg={4}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="primary"
                 icon="person_add"
-                title="Assessments"
-                count="2"
+                title="Patients Fully Treated"
+                count={consultations.filter((cons) => cons.status === "fully_recovered").length}
                 percentage={{
                   color: "success",
                   amount: "",
@@ -103,7 +109,7 @@ function Dashboard() {
             </MDBox>
           </Grid>
         </Grid>
-        <MDBox mt={4.5}>
+        {/* <MDBox mt={4.5}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3}>
@@ -143,7 +149,7 @@ function Dashboard() {
               </MDBox>
             </Grid>
           </Grid>
-        </MDBox>
+        </MDBox> */}
         {/* <MDBox>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={8}>
