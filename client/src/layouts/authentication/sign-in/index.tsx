@@ -19,9 +19,11 @@ import PageLayout from "examples/LayoutContainers/PageLayout";
 import { useAlert } from "react-alert";
 import brand from "assets/images/img.png";
 import MDBox from "components/MDBox";
+import { MenuItem } from "@mui/material";
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const [type, setType] = React.useState("patient");
   const alert = useAlert();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -55,10 +57,23 @@ export default function SignIn() {
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
+              required
+              fullWidth
+              name="type"
+              label="User Type"
+              select
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              SelectProps={{ sx: { height: "45px" } }}
+            >
+              <MenuItem value="patient">Patient</MenuItem>
+              <MenuItem value="staff">Staff</MenuItem>
+            </TextField>
+            <TextField
               margin="normal"
               required
               fullWidth
-              label="Matric Number / Username"
+              label={type === "patient" ? "Matric Number" : "Username"}
               name="username"
               autoFocus
             />
