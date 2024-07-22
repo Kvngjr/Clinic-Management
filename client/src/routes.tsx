@@ -23,11 +23,9 @@ import React from "react";
 
 // Material Dashboard 2 React layouts
 import Records from "layouts/records";
-import Tickets from "layouts/tickets";
-import ViewTickets from "layouts/tickets/view";
-import CreateTickets from "layouts/tickets/create";
-import ViewRecords from "layouts/records/view";
-import CreateRecords from "layouts/records/create";
+import ViewRecord from "layouts/records/view";
+import Consultations from "layouts/consultation";
+import ViewConsultation from "layouts/consultation/view";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 
@@ -43,42 +41,30 @@ const routes = [
     route: "/records",
     component: <Records />,
   },
-  // {
-  //   type: "collapse",
-  //   name: "Tickets",
-  //   key: "tickets",
-  //   icon: <Icon fontSize="small">confirmation_number</Icon>,
-  //   route: "/tickets",
-  //   component: <Tickets />,
-  // },
-  // {
-  //   type: "title",
-  //   name: "ViewTicket",
-  //   key: "viewTicket",
-  //   route: "/tickets/view",
-  //   component: <ViewTickets />,
-  // },
-  // {
-  //   type: "title",
-  //   name: "createTicket",
-  //   key: "createTicket",
-  //   route: "/tickets/create",
-  //   component: <CreateTickets />,
-  // },
-  // {
-  //   type: "title",
-  //   name: "viewRecord",
-  //   key: "viewRecord",
-  //   route: "/records/view",
-  //   component: <ViewRecords />,
-  // },
-  // {
-  //   type: "title",
-  //   name: "CreateRecord",
-  //   key: "createRecord",
-  //   route: "/records/create",
-  //   component: <CreateRecords />,
-  // },
+  {
+    // type: "title",
+    name: "Medical Records",
+    key: "record",
+    icon: <Icon fontSize="small">table</Icon>,
+    route: "/records/:id",
+    component: <ViewRecord />,
+  },
+  {
+    type: "collapse",
+    name: "Patient Management",
+    key: "consultations",
+    icon: <Icon fontSize="small">table</Icon>,
+    route: "/consultations",
+    component: <Consultations />,
+  },
+  {
+    // type: "title",
+    name: "Patient Management",
+    key: "consultation",
+    icon: <Icon fontSize="small">table</Icon>,
+    route: "/consultations/:id",
+    component: <ViewConsultation />,
+  },
   {
     type: "collapse",
     name: "Sign In",

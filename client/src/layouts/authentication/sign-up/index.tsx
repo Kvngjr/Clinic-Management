@@ -171,6 +171,9 @@ export default function SignUp() {
               {type === "patient" && (
                 <>
                   <Grid item xs={12}>
+                    <TextField required fullWidth name="level" label="Level" />
+                  </Grid>
+                  <Grid item xs={12}>
                     <TextField
                       required
                       fullWidth

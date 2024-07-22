@@ -7,13 +7,14 @@ class CustomUser(AbstractUser):
   
   def __str__(self):
       return self.email
-    
+
   class Meta:
     verbose_name = "User"
     verbose_name_plural = "Users"
-    
+
 class Patient(models.Model): 
   # First Form
+  level = models.TextField(blank=True, null=True)
   gender = models.TextField(choices=(("male", "Male"), ("female", "Female")), blank=True, null=True)
   dob = models.DateField(blank=True, null=True)
   age = models.IntegerField(blank=True, null=True)
@@ -86,7 +87,9 @@ class Staff(models.Model):
   user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="staff", unique=True)
   
 class Consultation(models.Model): 
-  brief = models.TextField()
+  note = models.TextField(blank=True, null=True)
+  medical_issue = models.TextField(blank=True, null=True)
+  prescription = models.TextField(blank=True, null=True)
   time = models.DateTimeField(auto_now_add=True)
   patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name="consultations")
   staffs = models.ManyToManyField(Staff, related_name="consultations")

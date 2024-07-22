@@ -21,7 +21,7 @@ export default function data(fetch) {
   }, []);
 
   const onButtonPress = (id) => {
-    setItem(id);
+    navigate(`/records/${id}`);
   };
   const columns = [
     { Header: "Patient", accessor: "patient", width: "90%", align: "left" },

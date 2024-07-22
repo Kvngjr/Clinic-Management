@@ -10,22 +10,22 @@ import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-import DataTable from "examples/Tables/DataTable";
 
 // Data
-import courseTableData from "layouts/records/data/medicalRecordsTableData";
-import { SearchContext } from "context/index";
-import { useContext } from "react";
+import { useLayoutEffect, useState } from "react";
 import { fetch_authenticated } from "utils/globals";
-import { getUser } from "utils/auth";
-import { Button, Icon, IconButton } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { AddOutlined } from "@mui/icons-material";
-import MedicalRecord from "./data/MedicalRecord";
 
 function Tables() {
+  const [consultation, setConsultation] = useState();
   const { id } = useParams();
-  const { user } = getUser();
+  const navigate = useNavigate();
+
+  useLayoutEffect(() => {
+    fetch_authenticated(`/consultation/${id}`)
+      .then((res) => res.json())
+      .then((consultation) => setConsultation(consultation));
+  }, []);
 
   return (
     <DashboardLayout>
@@ -46,11 +46,24 @@ function Tables() {
                 sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
               >
                 <MDTypography variant="h6" color="white">
-                  {user.type === "patient" && "Your"} Medical Record
+                  Consultation
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
-                <MedicalRecord patient_id={id} />
+                <Grid container spacing={2} p={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="note"
+                      label="Note"
+                      defaultValue={consultation.note}
+                      // onChange={(e) =>
+                      //   setPatient((p) => ({ ...p, previous_operations: e.target.value }))
+                      // }
+                    />
+                  </Grid>
+                </Grid>
               </MDBox>
             </Card>
           </Grid>

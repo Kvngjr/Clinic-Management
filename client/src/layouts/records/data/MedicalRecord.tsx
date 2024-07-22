@@ -7,12 +7,11 @@ import { fetch_authenticated, patch_authenticated, post_authenticated, User } fr
 
 export default function MedicalRecord({ patient_id }) {
   const [patient, setPatient] = useState<any>();
-  const { setItem } = useContext(SearchContext);
   const alert = useAlert();
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
-    fetch_authenticated(`patient/${patient_id}`)
+    fetch_authenticated(`patient/${patient_id}`, {})
       .then((res) => res.json())
       .then((patient) => setPatient(patient));
   }, [patient_id]);
@@ -23,14 +22,13 @@ export default function MedicalRecord({ patient_id }) {
     try {
       const data = { ...patient };
       delete data.user;
-      console.log(patient);
       const res = await patch_authenticated(`patient/${patient_id}`, {
         body: JSON.stringify(data),
       });
       const res_data = await res.json();
       if (res.status === 200 || res.status === 201) {
         alert.show("Updated Successfully", { type: "success" });
-        setItem(undefined);
+        navigate("/records");
       } else {
         console.log(res_data);
         alert.show("Something went wrong");

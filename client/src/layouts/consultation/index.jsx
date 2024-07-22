@@ -13,20 +13,26 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
-import courseTableData from "layouts/records/data/medicalRecordsTableData";
+import courseTableData from "layouts/consultation/data/consultationsTableData";
 import { SearchContext } from "context/index";
 import { useContext } from "react";
 import { fetch_authenticated } from "utils/globals";
 import { getUser } from "utils/auth";
 import { Button, Icon, IconButton } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AddOutlined } from "@mui/icons-material";
-import MedicalRecord from "./data/MedicalRecord";
+import MedicalRecord from "../records/data/MedicalRecord";
 
 function Tables() {
-  const { id } = useParams();
   const { user } = getUser();
+  const navigate = useNavigate();
+  const { item } = useContext(SearchContext);
 
+  const { columns, rows } = courseTableData((setConsultation) => {
+    fetch_authenticated(`/consultation`)
+      .then((res) => res.json())
+      .then((consultation) => setConsultation(consultation));
+  });
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -46,11 +52,22 @@ function Tables() {
                 sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
               >
                 <MDTypography variant="h6" color="white">
-                  {user.type === "patient" && "Your"} Medical Record
+                  Clinic Visits
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
-                <MedicalRecord patient_id={id} />
+                {(item || user.type === "patient") && (
+                  <MedicalRecord patient_id={user.type === "patient" ? user.patient : item} />
+                )}
+                {!item && user.type === "staff" && (
+                  <DataTable
+                    table={{ columns, rows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                )}
               </MDBox>
             </Card>
           </Grid>
