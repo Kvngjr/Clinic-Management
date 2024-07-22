@@ -135,7 +135,7 @@ export default function SignUp() {
                           required
                           fullWidth
                           id="username"
-                          label="Matric Number"
+                          label={type === "patient" ? "Matric Number" : "Username"}
                           name="username"
                           defaultValue={user.username}
                         />

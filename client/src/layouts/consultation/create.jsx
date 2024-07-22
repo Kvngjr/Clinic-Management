@@ -71,7 +71,7 @@ function Tables() {
                 sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
               >
                 <MDTypography variant="h6" color="white">
-                  Consultation
+                  Create a Consultation
                 </MDTypography>
               </MDBox>
               <MDBox pt={3} component="form" onSubmit={handleSubmit}>

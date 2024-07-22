@@ -54,6 +54,13 @@ function Tables() {
                 <MDTypography variant="h6" color="white">
                   Clinic Visits
                 </MDTypography>
+                <Button
+                  variant="outlined"
+                  color="white"
+                  onClick={() => navigate("/consultations/create")}
+                >
+                  Create
+                </Button>
               </MDBox>
               <MDBox pt={3}>
                 {user.type === "staff" && (
@@ -70,6 +77,9 @@ function Tables() {
           </Grid>
         </Grid>
       </MDBox>
+      <Button variant="contained" sx={{ color: "#fff", display: "block", ml: "auto " }}>
+        Print Report
+      </Button>
       <Footer />
     </DashboardLayout>
   );

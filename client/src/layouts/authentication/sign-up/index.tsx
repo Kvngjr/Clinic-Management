@@ -15,10 +15,12 @@ import { baseUrl, fetch_authenticated } from "utils/globals";
 import PageLayout from "examples/LayoutContainers/PageLayout";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useAlert } from "react-alert";
+import MDBox from "components/MDBox";
+import brand from "assets/images/img.png";
 
 export default function SignUp() {
   const [image, setImage] = React.useState<File | null>(null);
-  const [type, setType] = React.useState("");
+  const [type, setType] = React.useState("patient");
   const [imageDataUri, setImageDataUri] = React.useState<string | ArrayBuffer | null>("");
   const [imageError, setImageError] = React.useState<string | null>(null);
   const navigate = useNavigate();
@@ -79,14 +81,27 @@ export default function SignUp() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <MDBox component="img" src={brand} alt="Brand" width="5rem" pb={2} />
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2} sx={{ maxWidth: "444px" }}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="type"
+                  label="User Type"
+                  select
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  SelectProps={{ sx: { height: "45px" } }}
+                >
+                  <MenuItem value="patient">Patient</MenuItem>
+                  <MenuItem value="staff">Staff</MenuItem>
+                </TextField>
+              </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
@@ -113,21 +128,12 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="username"
-                  label="Matric Number"
+                  label={type === "patient" ? "Matric Number" : "Username"}
                   name="username"
                   autoComplete="username"
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid> */}
+
               <Grid item xs={12}>
                 <FormControl sx={{ width: "100%" }} variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">Passport</InputLabel>
@@ -152,21 +158,6 @@ export default function SignUp() {
                     }
                   />
                 </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="type"
-                  label="User Type"
-                  select
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  SelectProps={{ sx: { height: "45px" } }}
-                >
-                  <MenuItem value="patient">Patient</MenuItem>
-                  <MenuItem value="staff">Staff</MenuItem>
-                </TextField>
               </Grid>
               {type === "patient" && (
                 <>

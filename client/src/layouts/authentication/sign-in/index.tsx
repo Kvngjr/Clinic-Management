@@ -17,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { baseUrl } from "utils/globals";
 import PageLayout from "examples/LayoutContainers/PageLayout";
 import { useAlert } from "react-alert";
+import brand from "assets/images/img.png";
+import MDBox from "components/MDBox";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -46,9 +48,7 @@ export default function SignIn() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <MDBox component="img" src={brand} alt="Brand" width="5rem" pb={2} />
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
@@ -57,7 +57,7 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              label="Matric Number"
+              label="Matric Number / Username"
               name="username"
               autoFocus
             />
