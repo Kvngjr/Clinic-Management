@@ -32,6 +32,7 @@ export default function SignIn() {
       const credentials: { token: string; user: User } = await res.json();
       signInUser(credentials.user, credentials.token);
       navigate("/");
+      location.reload();
     } else {
       alert.show("Something went wrong");
     }
