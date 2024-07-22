@@ -29,6 +29,17 @@ export const patch_authenticated = (route, options) => {
   });
 };
 
+export const patch_authenticated_form = (route, options) => {
+  const { token } = getUser();
+  return fetch(`${baseUrl}${route}/`, {
+    ...options,
+    method: "PATCH",
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+  });
+};
+
 export const post_authenticated = (route, options) => {
   const { token } = getUser();
   return fetch(`${baseUrl}${route}/`, {
@@ -36,6 +47,16 @@ export const post_authenticated = (route, options) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
+    },
+  });
+};
+export const post_authenticated_form = (route, options) => {
+  const { token } = getUser();
+  return fetch(`${baseUrl}${route}/`, {
+    ...options,
+    method: "POST",
+    headers: {
       Authorization: `Token ${token}`,
     },
   });

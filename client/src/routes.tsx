@@ -26,6 +26,7 @@ import Records from "layouts/records";
 import ViewRecord from "layouts/records/view";
 import Consultations from "layouts/consultation";
 import ViewConsultation from "layouts/consultation/view";
+import CreateConsultation from "layouts/consultation/create";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 
@@ -64,6 +65,14 @@ const routes = [
     icon: <Icon fontSize="small">table</Icon>,
     route: "/consultations/:id",
     component: <ViewConsultation />,
+  },
+  {
+    // type: "title",
+    name: "Patient Management",
+    key: "create-consultation",
+    icon: <Icon fontSize="small">table</Icon>,
+    route: "/consultations/create",
+    component: <CreateConsultation />,
   },
   {
     type: "collapse",

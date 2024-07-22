@@ -64,7 +64,7 @@ class StaffSerializer(serializers.ModelSerializer):
     fields = "__all__"
     
 class ConsultationSerializer(serializers.ModelSerializer):
-  staffs = StaffSerializer(many=True, read_only=True)
+  staff = StaffSerializer(read_only=True)
   patient = PatientSerializer(read_only=True)
   class Meta: 
     model = Consultation

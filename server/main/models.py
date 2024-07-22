@@ -91,8 +91,9 @@ class Consultation(models.Model):
   medical_issue = models.TextField(blank=True, null=True)
   prescription = models.TextField(blank=True, null=True)
   time = models.DateTimeField(auto_now_add=True)
+  status = models.TextField(choices=(("undergoing_treatment", "Undergoing Treatment"), ("fully_recovered", "Fully Recovered")), blank=True, null=True)
   patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name="consultations")
-  staffs = models.ManyToManyField(Staff, related_name="consultations")
+  staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name="consultations")
   
 class Ticket(models.Model): 
   complaint = models.TextField()
