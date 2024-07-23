@@ -22,7 +22,7 @@ import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 import { useLayoutEffect, useState } from "react";
 import { fetch_authenticated } from "utils/globals";
 import { getUser } from "utils/auth";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 function Dashboard() {
   const [patients, setPatients] = useState([]);
@@ -42,7 +42,7 @@ function Dashboard() {
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox py={3}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} alignItems="stretch">
           {user.type === "staff" && (
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={1.5}>
@@ -60,20 +60,14 @@ function Dashboard() {
               </MDBox>
             </Grid>
           )}
-          <Grid item xs={12} md={6} lg={4}>
-            <MDBox mb={1.5}>
+          <Grid container item xs={12} md={6} lg={4} alignItems="stretch">
+            <MDBox mb={1.5} flex={1}>
               <ComplexStatisticsCard
                 icon="leaderboard"
                 title={user.type === "patient" ? "Previous Visits" : "Visitors Today"}
                 count={
                   user.type === "patient"
-                    ? consultations
-                        .filter((cons) => {
-                          const consultationDate = new Date(cons.time).toDateString();
-                          const todayDate = new Date().toDateString();
-                          return consultationDate === todayDate;
-                        })
-                        .filter((cons) => cons.patient.id === user.patient.id).length
+                    ? consultations.filter((cons) => cons.patient.id === user.patient.id).length
                     : consultations.filter((cons) => {
                         const consultationDate = new Date(cons.time).toDateString();
                         const todayDate = new Date().toDateString();
@@ -88,8 +82,8 @@ function Dashboard() {
               />
             </MDBox>
           </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <MDBox mb={1.5}>
+          <Grid item xs={12} md={6} lg={4} alignItems="stretch" height="100%">
+            <Box mb={1.5} height="100%">
               <ComplexStatisticsCard
                 color="success"
                 icon="store"
@@ -110,7 +104,7 @@ function Dashboard() {
                   label: "Just updated",
                 }}
               />
-            </MDBox>
+            </Box>
           </Grid>
           {user.type === "staff" && (
             <Grid item xs={12} md={6} lg={4}>
