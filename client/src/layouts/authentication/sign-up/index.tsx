@@ -63,6 +63,7 @@ export default function SignUp() {
       await signInUser(credentials.user, credentials.token);
       alert.show("Sign-Up Successful", { type: "success" });
       navigate("/");
+      location.reload();
     } else {
       const error = await res.json();
       console.log(error);
