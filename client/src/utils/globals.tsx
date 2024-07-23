@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useLayoutEffect, useState } from "react";
 import MDBox from "components/MDBox";
 import { getUser } from "./auth";
-import { Avatar } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import MDTypography from "components/MDTypography";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export const baseUrl = "http://127.0.0.1:8000/";
 
@@ -85,5 +88,62 @@ export const FormattedTime = ({ time }) => {
     <MDTypography sx={{ textAlign: "right", fontSize: 11 }}>
       {new Date(time).toDateString() + ", " + new Date(time).toLocaleTimeString()}
     </MDTypography>
+  );
+};
+
+export const PrintReport = () => {
+  const [consultations, setConsultations] = useState([]);
+  useLayoutEffect(() => {
+    fetch_authenticated(`/consultation`, {})
+      .then((res) => res.json())
+      .then((consultations) => {
+        setConsultations(consultations);
+      });
+  }, []);
+
+  const printPdf = () => {
+    const docDefinition = {
+      content: [
+        { text: "Clinic Visits", style: "header" },
+        {
+          layout: "lightHorizontalLines", // optional
+          table: {
+            // headers are automatically repeated if the table spans over multiple pages
+            // you can declare how many rows should be treated as headers
+            headerRows: 1,
+
+            body: [["Doctor", "Patient", "Medical Issue", "Prescription", "Time", "status"]].concat(
+              consultations.map((consultation) => [
+                consultation.staff.user.first_name + " " + consultation.staff.user.last_name,
+                consultation.patient.user.first_name + " " + consultation.patient.user.last_name,
+                consultation.medical_issue,
+                consultation.prescription,
+                new Date(consultation.time).toUTCString(),
+                consultation.status === "undergoing_treatment"
+                  ? "Undergoing Treatment"
+                  : "Fully Recovered",
+              ])
+            ),
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 22,
+          bold: true,
+          alignment: "center",
+        },
+      },
+    };
+    pdfMake.createPdf(docDefinition).open();
+  };
+  return (
+    <Button
+      variant="contained"
+      sx={{ color: "#fff", display: "block", ml: "auto " }}
+      onClick={printPdf}
+    >
+      Print Report
+    </Button>
   );
 };

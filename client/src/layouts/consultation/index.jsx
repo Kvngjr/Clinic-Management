@@ -14,25 +14,24 @@ import DataTable from "examples/Tables/DataTable";
 
 // Data
 import courseTableData from "layouts/consultation/data/consultationsTableData";
-import { SearchContext } from "context/index";
-import { useContext } from "react";
-import { fetch_authenticated } from "utils/globals";
+import { useState } from "react";
+import { fetch_authenticated, PrintReport } from "utils/globals";
 import { getUser } from "utils/auth";
 import { Button, Icon, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { AddOutlined } from "@mui/icons-material";
-import MedicalRecord from "../records/data/MedicalRecord";
 
 function Tables() {
   const { user } = getUser();
   const navigate = useNavigate();
-  const { item } = useContext(SearchContext);
 
-  const { columns, rows } = courseTableData((setConsultation) => {
+  const { columns, rows } = courseTableData((setData) => {
     fetch_authenticated(`/consultation`)
       .then((res) => res.json())
-      .then((consultation) => setConsultation(consultation));
+      .then((consultations) => {
+        setData(consultations);
+      });
   });
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -77,9 +76,7 @@ function Tables() {
           </Grid>
         </Grid>
       </MDBox>
-      <Button variant="contained" sx={{ color: "#fff", display: "block", ml: "auto " }}>
-        Print Report
-      </Button>
+      <PrintReport />
       <Footer />
     </DashboardLayout>
   );

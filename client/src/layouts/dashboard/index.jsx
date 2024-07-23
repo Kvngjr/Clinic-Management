@@ -20,7 +20,7 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 import { useLayoutEffect, useState } from "react";
-import { fetch_authenticated } from "utils/globals";
+import { fetch_authenticated, PrintReport } from "utils/globals";
 import { getUser } from "utils/auth";
 import { Box, Button } from "@mui/material";
 
@@ -125,11 +125,7 @@ function Dashboard() {
           )}
         </Grid>
       </MDBox>
-      {user.type === "staff" && (
-        <Button variant="contained" sx={{ color: "#fff", display: "block", ml: "auto " }}>
-          Print Report
-        </Button>
-      )}
+      {user.type === "staff" && <PrintReport />}
       <Footer />
     </DashboardLayout>
   );
